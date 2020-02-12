@@ -1,3 +1,63 @@
 @import 'node_modules/bootstrap/scss/bootstrap';
 @import 'node_modules/bootstrap-vue/src/index.scss';
 
+.card-body {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    color: #343a40;
+}
+
+.normal	{ 
+    background-color: #d3d3d3;
+}
+.fire { 
+    background-color: #e38c2d;
+}
+.water { 
+    background-color: #0077be;
+}
+.electric { 
+    background-color: #ffff33;
+}
+.grass {
+    background-color: #32cd32;
+}
+.ice {
+    background-color: #dcf3ff; 
+}
+.fighting {
+    background-color: #800000;
+}
+.poison	{
+    background-color: #b70df2;
+}
+.ground	{
+    background-color: #e0c068;
+}
+.flying	{
+    background-color: #a4c2f4;
+}
+.psychic {
+    background-color: #ff007f;
+}
+.bug {
+    background-color: #7ec850;
+}
+.rock {
+    background-color: #9b7653;
+}
+.ghost {
+    background-color: #593d75;
+}
+.dragon	{
+    background-color: #2e2be2;
+}
+.dark {
+    background-color: #2b1d0e;
+}
+.steel {
+    background-color: #a7a7a7;
+}
+.fairy {
+    background-color: #ffb6c1;
+}
