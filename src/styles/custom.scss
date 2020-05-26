@@ -1,0 +1,38 @@
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+.container-fluid {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.table {
+  &.table-hover {
+    tr {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.card {
+  > .card-body {
+    .table {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.toasted-container {
+  &.top-right {
+    top: 0;
+    right: 10px;
+  }
+  .toasted {
+    &.toasted-primary {
+      &.success {
+        background-color: $success;
+      }
+    }
+  }
+}
