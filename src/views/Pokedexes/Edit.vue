@@ -16,9 +16,12 @@
               type="button"
               class="btn btn-danger btn-sm float-right"
               v-on:click="removePokedex"
-            >
-              Delete
-            </button>
+            >Delete</button>
+            <!-- <b-dropdown size="sm" split text="More Actions" variant="info" class="float-right">
+              <b-dropdown-item-button v-on:click="manageGames">Manage Games</b-dropdown-item-button>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item-button variant="danger" v-on:click="removePokedex">Delete</b-dropdown-item-button>
+            </b-dropdown>-->
             Editing Pokédex {{ model.game_group_id }}
           </h4>
           <div class="card-body">
@@ -56,104 +59,122 @@
           </div>
         </div>
       </div>
-      <div class="col-sm"></div>
+      <div class="col-sm">
+        <div class="card">
+          <div class="card-header">
+            <h4>
+              <button
+                type="button"
+                class="btn btn-info btn-sm float-right"
+                v-on:click="manageGames"
+              >Manage</button>
+              Pokédex Games
+            </h4>
+          </div>
+          <div class="card-body">
+            <b-list-group>
+              <b-list-group>
+                <b-list-group-item v-for="g in games" v-bind:key="g.game_id">
+                  <strong>{{ g.name }}</strong>
+                </b-list-group-item>
+              </b-list-group>
+            </b-list-group>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="mt-4">
-      <button
-        type="button"
-        class="btn btn-primary mr-2"
-        v-on:click="onSubmit"
-        :disabled="busy"
-      >
-        Save
-      </button>
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        v-on:click="onCancel"
-      >
-        Back
-      </button>
+    <div class="row form-actions">
+      <div class="col-sm">
+        <button
+          type="button"
+          class="btn btn-primary float-right"
+          v-on:click="onSubmit"
+          :disabled="busy"
+        >Save</button>
+        <router-link to="/pokedex/list" class="a-cancel">Back</router-link>
+      </div>
+      <div class="col-sm"></div>
     </div>
   </div>
 </template>
 
 <script>
-import PokedexesApi from "@/apis/pokedexes";
+import PokedexesApi from '@/apis/pokedexes'
 
 export default {
-  name: "PokedexEdit",
-  data() {
+  name: 'PokedexEdit',
+  data () {
     return {
-      model: {
-        name_id: "",
-        name: "",
-        alternate_name: ""
-      },
+      model: {},
+      games: [],
       busy: false
-    };
+    }
   },
-  created() {
-    this.getPokedex();
+  created () {
+    this.getPokedex()
+    this.getPokedexGames()
   },
   computed: {
-    id() {
-      return this.$route.params.id;
+    id () {
+      return this.$route.params.id
     }
   },
   methods: {
-    async getPokedex() {
-      this.model = await PokedexesApi.get(this.$route.params.id);
+    async getPokedex () {
+      this.model = await PokedexesApi.get(this.$route.params.id)
     },
-    onCancel() {
-      this.$router.push({ name: "PokedexList" });
+    async getPokedexGames () {
+      this.games = await PokedexesApi.listGames(this.id)
     },
-    async onSubmit(e) {
-      this.busy = true;
+    async onSubmit (e) {
+      this.busy = true
 
       try {
         const response = await PokedexesApi.put(
           this.model.game_group_id,
           this.model
-        );
-        this.$toasted.success(response.data, { icon: "check_circle_outline" });
+        )
+        this.$toasted.success(response.data, { icon: 'check_circle_outline' })
       } catch (ex) {
-        this.$toasted.error(ex.message, { icon: "highlight_off" });
+        this.$toasted.error(ex.message, { icon: 'highlight_off' })
       }
-      this.busy = false;
-      e.preventDefault();
+      this.busy = false
+      e.preventDefault()
     },
-    removePokedex() {
-      this.$toasted.show("Are you sure?", {
+    manageGames () {
+      this.$router.push({ name: 'PokedexGamesEdit', params: { id: this.id } })
+    },
+    removePokedex () {
+      this.$toasted.show('Are you sure?', {
         duration: null,
-        icon: "contact_support",
+        icon: 'contact_support',
         action: [
           {
-            text: "Yes",
+            text: 'Yes',
             onClick: async (e, toastObject) => {
-              toastObject.goAway(0);
+              toastObject.goAway(0)
               try {
                 const response = await PokedexesApi.remove(
                   this.$route.params.id
-                );
+                )
                 this.$toasted.success(response.data, {
-                  icon: "check_circle_outline"
-                });
-                this.$router.push({ name: "PokedexList" });
+                  icon: 'check_circle_outline'
+                })
+                this.$router.push({ name: 'PokedexList' })
               } catch (ex) {
-                this.$toasted.error(ex.message, { icon: "highlight_off" });
+                this.$toasted.error(ex.message, { icon: 'highlight_off' })
               }
             }
           },
           {
-            text: "No",
+            text: 'No',
             onClick: (e, toastObject) => {
-              toastObject.goAway(0);
+              toastObject.goAway(0)
             }
           }
         ]
-      });
+      })
     }
   }
-};
+}
 </script>

@@ -51,6 +51,21 @@
                     v-model="model.name"
                   />
                 </div>
+                <div class="form-group">
+                  <label for="inputRegions">Regions</label>
+                  <multiselect
+                    v-model="model.regions"
+                    :options="regionOptions"
+                    :multiple="true"
+                    :searchable="false"
+                    :hide-selected="true">
+                    <template slot="tag" slot-scope="{ option, remove }">
+                      <span class="multiselect__tag" :class="option.toLowerCase()">
+                        <span>{{ option }}</span> <i aria-hidden="true" tabindex="1" class="multiselect__tag-icon" @click="remove(option)"></i>
+                      </span>
+                    </template>
+                  </multiselect>
+                </div>
                 <!-- <div class="form-group">
                   <label for="inputAltName">Alternate Name</label>
                   <input type="text" class="form-control form-control-lg" id="inputAltName" v-model="model.alternate_name">
@@ -62,98 +77,94 @@
       </div>
       <div class="col-sm"></div>
     </div>
-    <div class="mt-4">
-      <button
-        type="button"
-        class="btn btn-primary mr-2"
-        v-on:click="onSubmit"
-        :disabled="busy"
-      >
-        Save
-      </button>
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        v-on:click="onCancel"
-      >
-        Back
-      </button>
+    <div class="row form-actions">
+      <div class="col-sm">
+        <button
+          type="button"
+          class="btn btn-primary float-right"
+          v-on:click="onSubmit"
+          :disabled="busy"
+        >
+          Save
+        </button>
+        <router-link to="/game/list" class="a-cancel">Back</router-link>
+      </div>
+      <div class="col-sm"></div>
     </div>
   </div>
 </template>
 
 <script>
-import GamesApi from "@/apis/games";
+import Multiselect from 'vue-multiselect'
+import { Regions } from '@/constants/regions.js'
+import GamesApi from '@/apis/games'
 
 export default {
-  name: "GameEdit",
-  data() {
-    return {
-      model: {
-        generation: 0,
-        name_id: "",
-        name: ""
-      },
-      busy: false
-    };
+  name: 'GameEdit',
+  components: {
+    Multiselect
   },
-  created() {
-    this.getGame();
+  data () {
+    return {
+      model: {},
+      busy: false,
+      regionOptions: Regions
+    }
+  },
+  created () {
+    this.getGame()
   },
   computed: {
-    id() {
-      return this.$route.params.id;
+    id () {
+      return this.$route.params.id
     }
   },
   methods: {
-    async getGame() {
-      this.model = await GamesApi.get(this.$route.params.id);
+    async getGame () {
+      this.model = await GamesApi.get(this.$route.params.id)
     },
-    onCancel() {
-      this.$router.push({ name: "GameList" });
-    },
-    async onSubmit(e) {
-      this.busy = true;
+    async onSubmit (e) {
+      this.busy = true
       try {
-        const response = await GamesApi.put(this.model.game_id, this.model);
-        this.$toasted.success(response.data, { icon: "check_circle_outline" });
+        const response = await GamesApi.put(this.model.game_id, this.model)
+        this.$toasted.success(response.data, { icon: 'check_circle_outline' })
       } catch (ex) {
-        this.$toasted.error(ex.message, { icon: "highlight_off" });
+        this.$toasted.error(ex.message, { icon: 'highlight_off' })
       }
-      this.busy = false;
-      e.preventDefault();
+      this.busy = false
+      e.preventDefault()
     },
-    removeGame() {
-      this.$toasted.show("Are you sure?", {
+    removeGame () {
+      this.$toasted.show('Are you sure?', {
         duration: null,
-        icon: "contact_support",
+        icon: 'contact_support',
         action: [
           {
-            text: "Yes",
+            text: 'Yes',
             onClick: async (e, toastObject) => {
-              toastObject.goAway(0);
+              toastObject.goAway(0)
               try {
-                const response = await GamesApi.remove(this.$route.params.id);
+                const response = await GamesApi.remove(this.$route.params.id)
                 this.$toasted.success(response.data, {
-                  icon: "check_circle_outline"
-                });
-                this.$router.push({ name: "GameList" });
+                  icon: 'check_circle_outline'
+                })
+                this.$router.push({ name: 'GameList' })
               } catch (ex) {
                 this.$toasted.error(ex.message, {
-                  icon: "highlight_off"
-                });
+                  icon: 'highlight_off'
+                })
               }
             }
           },
           {
-            text: "No",
+            text: 'No',
             onClick: (e, toastObject) => {
-              toastObject.goAway(0);
+              toastObject.goAway(0)
             }
           }
         ]
-      });
+      })
     }
   }
-};
+}
 </script>

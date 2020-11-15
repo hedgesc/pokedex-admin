@@ -1,13 +1,20 @@
 import Api from '@/services/api'
+import * as queryString from 'querystring'
+import _ from 'lodash'
 
-let basePath = 'moves'
+const basePath = 'moves'
 
-const list = () => {
+const list = params => {
   let url = basePath
 
-  if(filters) {
-    const qs = Object.keys(filters).map(key => key + '=' + filters[key]).join('&')
-    url = url + '?' + qs
+  if (params) {
+    const filters = {
+      limit: 8,
+      offset: 0
+    }
+    _.assign(filters, params)
+
+    url = url + '?' + queryString.stringify(filters)
   }
 
   return Api.get(url)
@@ -36,19 +43,19 @@ const put = (moveId, model) => {
 
   return Api.put(url, model)
     .then(res => {
-      return res.data
+      return res
     })
     .catch(err => {
       throw err
     })
-} 
+}
 
 const post = (model) => {
   const url = basePath
 
   return Api.post(url, model)
     .then(res => {
-      return res.data
+      return res
     })
     .catch(err => {
       throw err
@@ -60,7 +67,7 @@ const remove = (moveId) => {
 
   return Api.delete(url)
     .then(res => {
-      return res.data
+      return res
     })
     .catch(err => {
       throw err

@@ -1,13 +1,20 @@
 import Api from '@/services/api'
+import * as queryString from 'querystring'
+import _ from 'lodash'
 
-let basePath = 'characters'
+const basePath = 'characters'
 
-const list = (filters) => {
+const list = params => {
   let url = basePath
 
-  if(filters) {
-    const qs = Object.keys(filters).map(key => key + '=' + filters[key]).join('&')
-    url = url + '?' + qs
+  if (params) {
+    const filters = {
+      limit: 6,
+      offset: 0
+    }
+    _.assign(filters, params)
+
+    url = url + '?' + queryString.stringify(filters)
   }
 
   return Api.get(url)
@@ -19,7 +26,7 @@ const list = (filters) => {
     })
 }
 
-const get = (characterId) => {
+const get = characterId => {
   const url = basePath + '/' + characterId
 
   return Api.get(url)
@@ -36,31 +43,31 @@ const put = (characterId, model) => {
 
   return Api.put(url, model)
     .then(res => {
-      return res.data
-    })
-    .catch(err => {
-      throw err
-    })
-} 
-
-const post = (model) => {
-  const url = basePath
-
-  return Api.post(url, model)
-    .then(res => {
-      return res.data
+      return res
     })
     .catch(err => {
       throw err
     })
 }
 
-const remove = (characterId) => {
+const post = model => {
+  const url = basePath
+
+  return Api.post(url, model)
+    .then(res => {
+      return res
+    })
+    .catch(err => {
+      throw err
+    })
+}
+
+const remove = characterId => {
   const url = basePath + '/' + characterId
 
   return Api.delete(url)
     .then(res => {
-      return res.data
+      return res
     })
     .catch(err => {
       throw err

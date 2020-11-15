@@ -1,8 +1,19 @@
 <template>
   <div id="app">
-    <nav id="nav" class="navbar navbar-dark bg-dark navbar-expand-md">
-      <a target="_self" href="#" class="navbar-brand">
-        <img src="@/assets/logo.png" width="32" height="32" />
+    <nav
+      id="nav"
+      class="navbar navbar-dark bg-dark navbar-expand-md"
+    >
+      <a
+        target="_self"
+        href="#"
+        class="navbar-brand"
+      >
+        <img
+          src="@/assets/logo.png"
+          width="32"
+          height="32"
+        >
       </a>
       <button
         type="button"
@@ -11,7 +22,7 @@
         aria-expanded="false"
         class="navbar-toggler"
       >
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon" />
       </button>
       <div
         id="nav-collapse"
@@ -21,41 +32,53 @@
         <ul class="navbar-nav">
           <li
             :class="[
-              currentPage.includes('home') ? activeClass : '',
+              currentPage == '/' ? activeClass : '',
               'nav-item'
             ]"
           >
-            <router-link class="nav-link" to="/home">
+            <router-link
+              class="nav-link"
+              to="/"
+            >
               Home
             </router-link>
           </li>
           <li
             :class="[
-              currentPage.includes('pokedex') ? activeClass : '',
+              currentPage.includes('/pokedex/') ? activeClass : '',
               'nav-item'
             ]"
           >
-            <router-link class="nav-link" to="/pokedex/list">
+            <router-link
+              class="nav-link"
+              to="/pokedex/list"
+            >
               Pokédexes
             </router-link>
           </li>
           <li
             :class="[
-              currentPage.includes('game') ? activeClass : '',
+              currentPage.includes('/game/') ? activeClass : '',
               'nav-item'
             ]"
           >
-            <router-link class="nav-link" to="/game/list">
+            <router-link
+              class="nav-link"
+              to="/game/list"
+            >
               Games
             </router-link>
           </li>
           <li
             :class="[
-              currentPage.includes('character') ? activeClass : '',
+              currentPage.includes('/character/') ? activeClass : '',
               'nav-item'
             ]"
           >
-            <router-link class="nav-link" to="/characters">
+            <router-link
+              class="nav-link"
+              to="/character/list"
+            >
               Characters
             </router-link>
           </li>
@@ -65,7 +88,10 @@
               'nav-item'
             ]"
           >
-            <router-link class="nav-link" to="/moves">
+            <router-link
+              class="nav-link"
+              to="/move/list"
+            >
               Moves
             </router-link>
           </li>
@@ -80,16 +106,16 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      activeClass: "active"
-    };
+      activeClass: 'active'
+    }
   },
   computed: {
-    currentPage() {
-      console.log("route path", this.$route.path);
-      return this.$route.path;
+    currentPage () {
+      console.log('route path', this.$route.path)
+      return this.$route.path
     }
   }
-};
+}
 </script>

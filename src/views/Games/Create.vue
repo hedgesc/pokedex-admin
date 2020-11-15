@@ -44,6 +44,21 @@
                     v-model="model.name"
                   />
                 </div>
+                <div class="form-group">
+                  <label for="inputRegions">Regions</label>
+                  <multiselect
+                    v-model="model.regions"
+                    :options="regionOptions"
+                    :multiple="true"
+                    :searchable="false"
+                    :hide-selected="true">
+                    <template slot="tag" slot-scope="{ option, remove }">
+                      <span class="multiselect__tag" :class="option.toLowerCase()">
+                        <span>{{ option }}</span> <i aria-hidden="true" tabindex="1" class="multiselect__tag-icon" @click="remove(option)"></i>
+                      </span>
+                    </template>
+                  </multiselect>
+                </div>
                 <!-- <div class="form-group">
                   <label for="inputAltName">Alternate Name</label>
                   <input type="text" class="form-control form-control-lg" id="inputAltName" v-model="model.alternate_name">
@@ -55,63 +70,58 @@
       </div>
       <div class="col-sm"></div>
     </div>
-    <div class="mt-4">
-      <button
-        type="button"
-        class="btn btn-primary mr-2"
-        :disabled="busy"
-        v-on:click="onSubmit"
-      >
-        Create
-      </button>
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        v-on:click="onCancel"
-      >
-        Back
-      </button>
+    <div class="row form-actions">
+      <div class="col-sm">
+        <button
+          type="button"
+          class="btn btn-primary float-right"
+          :disabled="busy"
+          v-on:click="onSubmit"
+        >
+          Create
+        </button>
+        <router-link to="/game/list" class="a-cancel">Cancel</router-link>
+      </div>
+      <div class="col-sm"></div>
     </div>
   </div>
 </template>
 
 <script>
-import GamesApi from "@/apis/games";
+import Multiselect from 'vue-multiselect'
+import { Regions } from '@/constants/regions.js'
+import GamesApi from '@/apis/games'
 
 export default {
-  name: "GameCreate",
-  data() {
+  name: 'GameCreate',
+  components: {
+    Multiselect
+  },
+  data () {
     return {
-      model: {
-        generation: 0,
-        name_id: "",
-        name: "",
-        regions: ["Fake"]
-      },
-      busy: false
-    };
+      model: {},
+      busy: false,
+      regionOptions: Regions
+    }
   },
   methods: {
-    onCancel() {
-      this.$router.push({ name: "GameList" });
-    },
-    async onSubmit(e) {
-      this.busy = true;
-      console.log(JSON.stringify(this.model));
+    async onSubmit (e) {
+      this.busy = true
+
       try {
-        const response = await GamesApi.post(this.model);
+        const response = await GamesApi.post(this.model)
         this.$toasted.success(response.data, {
-          icon: "check_circle_outline"
-        });
-        this.$router.push({ name: "GameList" });
+          icon: 'check_circle_outline'
+        })
+        this.$router.push({ name: 'GameList' })
       } catch (ex) {
         this.$toasted.error(ex.message, {
-          icon: "highlight_off"
-        });
+          icon: 'highlight_off'
+        })
       }
-      this.busy = false;
-      e.preventDefault();
+      this.busy = false
+      e.preventDefault()
     }
   }
-};
+}
 </script>

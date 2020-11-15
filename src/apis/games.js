@@ -1,66 +1,66 @@
-import Api from "@/services/api";
+import Api from '@/services/api'
 
-let basePath = "games";
+const basePath = 'games'
 
 const list = () => {
-  const url = basePath;
+  const url = basePath
 
   return Api.get(url)
     .then(res => {
-      return res.data || [];
+      return res.data || []
     })
     .catch(err => {
-      throw err;
-    });
-};
+      throw err
+    })
+}
 
 const get = gameId => {
-  const url = basePath + "/" + gameId;
+  const url = basePath + '/' + gameId
 
   return Api.get(url)
     .then(res => {
-      return res.data;
+      return res.data
     })
     .catch(err => {
-      throw err;
-    });
-};
+      throw err
+    })
+}
 
 const put = (gameId, model) => {
-  const url = basePath + "/" + gameId;
+  const url = basePath + '/' + gameId
 
   return Api.put(url, model)
     .then(res => {
-      return res;
+      return res
     })
     .catch(err => {
-      throw err;
-    });
-};
+      throw err
+    })
+}
 
 const post = model => {
-  const url = basePath;
+  const url = basePath
 
   return Api.post(url, model)
     .then(res => {
-      return res;
+      return res
     })
     .catch(err => {
-      throw err;
-    });
-};
+      throw err
+    })
+}
 
 const remove = gameId => {
-  const url = basePath + "/" + gameId;
+  const url = basePath + '/' + gameId
 
   return Api.delete(url)
     .then(res => {
-      return res;
+      return res
     })
     .catch(err => {
-      throw err;
-    });
-};
+      throw err
+    })
+}
 
 export default {
   list,
@@ -68,4 +68,4 @@ export default {
   put,
   post,
   remove
-};
+}

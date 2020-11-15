@@ -51,60 +51,54 @@
       </div>
       <div class="col-sm"></div>
     </div>
-    <div class="mt-4">
-      <button
-        type="button"
-        class="btn btn-primary mr-2"
-        :disabled="busy"
-        v-on:click="onSubmit"
-      >
-        Create
-      </button>
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        v-on:click="onCancel"
-      >
-        Back
-      </button>
+    <div class="row form-actions">
+      <div class="col-sm">
+        <button
+          type="button"
+          class="btn btn-primary float-right"
+          :disabled="busy"
+          v-on:click="onSubmit"
+        >
+          Create
+        </button>
+        <router-link to="/pokedex/list" class="a-cancel">Cancel</router-link>
+      </div>
+      <div class="col-sm"></div>
     </div>
   </div>
 </template>
 
 <script>
-import PokedexesApi from "@/apis/pokedexes";
+import PokedexesApi from '@/apis/pokedexes'
 
 export default {
-  name: "PokedexCreate",
-  data() {
+  name: 'PokedexCreate',
+  data () {
     return {
       model: {
-        name_id: "",
-        name: "",
-        alternate_name: ""
+        name_id: '',
+        name: '',
+        alternate_name: ''
       },
       busy: false
-    };
+    }
   },
   methods: {
-    onCancel() {
-      this.$router.push({ name: "PokedexList" });
-    },
-    async onSubmit(e) {
-      this.busy = true;
-      console.log(JSON.stringify(this.model));
+    async onSubmit (e) {
+      this.busy = true
+      console.log(JSON.stringify(this.model))
       try {
-        const response = await PokedexesApi.post(this.model);
+        const response = await PokedexesApi.post(this.model)
         this.$toasted.success(response.data, {
-          icon: "check_circle_outline"
-        });
-        this.$router.push({ name: "PokedexList" });
+          icon: 'check_circle_outline'
+        })
+        this.$router.push({ name: 'PokedexList' })
       } catch (ex) {
-        this.$toasted.error(ex.message, { icon: "highlight_off" });
+        this.$toasted.error(ex.message, { icon: 'highlight_off' })
       }
-      this.busy = false;
-      e.preventDefault();
+      this.busy = false
+      e.preventDefault()
     }
   }
-};
+}
 </script>

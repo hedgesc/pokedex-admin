@@ -34,10 +34,10 @@
               v-bind:key="gm.game_id"
               v-on:click="onRowClicked(gm.game_id)"
             >
-              <th scope="col">{{ gm.game_id }}</th>
+              <td scope="col">{{ gm.game_id }}</td>
               <td scope="col">{{ gm.name_id }}</td>
               <td scope="col">{{ gm.name }}</td>
-              <th scope="col">{{ gm.generation }}</th>
+              <td scope="col">{{ gm.generation }}</td>
               <td scope="col">{{ gm.regions }}</td>
             </tr>
           </tbody>
@@ -48,32 +48,32 @@
 </template>
 
 <script>
-import GamesApi from "@/apis/games";
+import GamesApi from '@/apis/games'
 
 export default {
-  name: "GameList",
-  data() {
+  name: 'GameList',
+  data () {
     return {
       games: [],
-      errorMessage: ""
-    };
+      errorMessage: ''
+    }
   },
-  created() {
-    this.listGames();
+  created () {
+    this.listGames()
   },
   methods: {
-    async listGames() {
-      this.errorMessage = "";
+    async listGames () {
+      this.errorMessage = ''
 
       try {
-        this.games = await GamesApi.list();
+        this.games = await GamesApi.list()
       } catch (e) {
-        this.errorMessage = e.message;
+        this.errorMessage = e.message
       }
     },
-    onRowClicked(id) {
-      this.$router.push({ name: "GameEdit", params: { id: id } });
+    onRowClicked (id) {
+      this.$router.push({ name: 'GameEdit', params: { id: id } })
     }
   }
-};
+}
 </script>

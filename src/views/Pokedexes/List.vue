@@ -1,5 +1,12 @@
 <template>
   <div id="pokedexes">
+
+    <loading
+      :active.sync="loading"
+      color="#343a40"
+      loader="dots"
+    ></loading>
+
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Pokédexes</li>
@@ -33,7 +40,7 @@
               v-bind:key="dex.game_group_id"
               v-on:click="onRowClicked(dex.game_group_id)"
             >
-              <th scope="col">{{ dex.game_group_id }}</th>
+              <td scope="col">{{ dex.game_group_id }}</td>
               <td scope="col">{{ dex.name_id }}</td>
               <td scope="col">{{ dex.name }}</td>
               <td scope="col">{{ dex.alternate_name }}</td>
@@ -46,32 +53,41 @@
 </template>
 
 <script>
-import PokedexesApi from "@/apis/pokedexes";
+import Loading from 'vue-loading-overlay'
+import PokedexesApi from '@/apis/pokedexes'
 
 export default {
-  name: "PokedexList",
-  data() {
+  name: 'PokedexList',
+  data () {
     return {
       dexes: [],
-      errorMessage: ""
-    };
+      errorMessage: '',
+      loading: true
+    }
   },
-  created() {
-    this.listPokedexes();
+  components: {
+    Loading
+  },
+  async beforeMount () {
+    await this.listPokedexes()
+    this.loading = false
   },
   methods: {
-    async listPokedexes() {
-      this.errorMessage = "";
+    onLoaded () {
+
+    },
+    async listPokedexes () {
+      this.errorMessage = ''
 
       try {
-        this.dexes = await PokedexesApi.list();
+        this.dexes = await PokedexesApi.list()
       } catch (e) {
-        this.errorMessage = e.message;
+        this.errorMessage = e.message
       }
     },
-    onRowClicked(id) {
-      this.$router.push({ name: "PokedexEdit", params: { id: id } });
+    onRowClicked (id) {
+      this.$router.push({ name: 'PokedexEdit', params: { id: id } })
     }
   }
-};
+}
 </script>
