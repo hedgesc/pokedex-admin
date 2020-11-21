@@ -4,6 +4,10 @@ const getBasePath = (id) => {
   return `characters/${id}/moves`
 }
 
+const getAltBasePath = (id) => {
+  return `character-moves/${id}`
+}
+
 const list = (characterId) => {
   const url = getBasePath(characterId)
 
@@ -27,8 +31,8 @@ const get = (characterId, moveId) => {
     })
 }
 
-const put = (characterId, moveId, model) => {
-  const url = getBasePath(characterId) + `/${moveId}`
+const put = (characterMoveId, model) => {
+  const url = getAltBasePath(characterMoveId)
   return Api.put(url, model)
 }
 

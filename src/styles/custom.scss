@@ -96,6 +96,9 @@
 // }
 .multiselect {
   min-height: auto;
+  .multiselect__select {
+    height: 46px;
+  }
   .multiselect__tags {
     height: calc(1.5em + 1rem + 2px);
     min-height: auto;
@@ -124,6 +127,10 @@
 }
 
 .multiselect__tag {
+  margin-bottom: 0;
+  height: 100%;
+  font-size: 0.8em;
+  line-height: 1.2em;
   &:focus {
     outline: none;
   }
@@ -136,17 +143,20 @@
     }
     &::after {
       color: #fff;
+      vertical-align: middle;
     }
   }
+  
   &.normal {
     background: #aa9;
     color: #fff;
   }
+  
   &.fire {
     background: #f42;
     color: #fff;
   }
-  
+
   &.water {
     background: #39f;
     color: #fff;

@@ -30,7 +30,7 @@ const router = new VueRouter({
     { path: '/character/list', component: CharacterList, name: 'CharacterList' },
     { path: '/character/edit/:id', component: CharacterEdit, name: 'CharacterEdit' },
     { path: '/character/edit/:id/games', component: CharacterGames, name: 'CharacterGames' },
-    { path: '/character/edit/:id/moves', component: CharacterMoves, name: 'CharaccterMoves' },
+    { path: '/character/edit/:id/moves', component: CharacterMoves, name: 'CharacterMoves' },
     { path: '/character/detail/:id', component: CharacterDetail, name: 'CharacterDetail' },
     { path: '/character/create', component: CharacterCreate, name: 'CharacterCreate' },
     { path: '/move/list', component: MoveList, name: 'MoveList' },

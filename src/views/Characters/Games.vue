@@ -14,39 +14,50 @@
           <template v-slot:header>
             <h4 class="mb-0">Games featuring {{ character.name }}</h4>
           </template>
-          <b-form inline @submit="onAddSubmit" @reset="onAddReset">
-            <b-form-select
-              v-model="model.game_id"
-              :options="gameOptions"
-              size="sm"
-              class="mb-2 mr-sm-2 mb-sm-0">
-              <template #first>
-                <b-form-select-option :value="null" disabled>Game</b-form-select-option>
-              </template>
-            </b-form-select>
-            <b-form-input
-              id="generation-input"
-              v-model="model.generation"
-              type="number"
-              size="sm"
-              placeholder="Generation"
-              class="mb-2 mr-sm-2 mb-sm-0"></b-form-input>
-            <b-form-input
-              id="game-character-id-input"
-              v-model="model.game_character_id"
-              type="number"
-              size="sm"
-              placeholder="Character Id"
-              class="mb-2 mr-sm-2 mb-sm-0"></b-form-input>
-            <b-button
-              type="submit"
-              variant="primary"
-              class="mb-2 mr-sm-2 mb-sm-0"
-              size="sm">Add</b-button>
-            <b-button
-              type="reset"
-              variant="danger"
-              size="sm">Reset</b-button>
+          <b-form @submit="onAddSubmit" @reset="onAddReset">
+            <b-row>
+              <b-col>
+                <b-form-select
+                  v-model="model.game_id"
+                  :options="gameOptions"
+                  size="sm"
+                  class="mb-2 mr-sm-2 mb-sm-0">
+                  <template #first>
+                    <b-form-select-option :value="null" disabled>Game</b-form-select-option>
+                  </template>
+                </b-form-select>
+              </b-col>
+              <b-col>
+                <b-form-input
+                  id="generation-input"
+                  v-model="model.generation"
+                  type="number"
+                  size="sm"
+                  placeholder="Generation"
+                  class="mb-2 mr-sm-2 mb-sm-0"></b-form-input>
+              </b-col>
+              <b-col>
+                <b-form-input
+                  id="game-character-id-input"
+                  v-model="model.game_character_id"
+                  type="number"
+                  size="sm"
+                  placeholder="Character Id"
+                  class="mb-2 mr-sm-2 mb-sm-0"></b-form-input>
+              </b-col>
+              <b-col>
+                <b-button
+                  type="submit"
+                  variant="primary"
+                  class="mb-2 mr-sm-2 mb-sm-0 inline-primary"
+                  size="sm">Add</b-button>
+                <b-button
+                  type="reset"
+                  variant="danger"
+                  class="inline-secondary"
+                  size="sm">Reset</b-button>
+              </b-col>
+            </b-row>
           </b-form>
 
           <hr />
@@ -59,8 +70,13 @@
               <b-col></b-col>
             </b-row>
           </div>
-          <div v-for="cg in characterGames" v-bind:key="cg.character_game_id">
-            <CharacterGame :item="cg" :games="gameOptions" />
+          <div v-for="(cg, i) in characterGames" v-bind:key="cg.character_game_id">
+            <CharacterGame
+              :index="i"
+              :item="cg"
+              :games="gameOptions"
+              @delete="onDelete"
+              @update="onUpdate" />
             <hr />
           </div>
         </b-card>
@@ -99,13 +115,8 @@ export default {
       character: null,
       games: [],
       characterGames: [],
-      characterGameFields: [
-        { key: 'name', label: 'Game' },
-        'generation',
-        { key: 'game_character_id', label: 'Dex #' }
-      ],
       model: {
-        character_id: this.id,
+        character_id: this.$route.params.id,
         game_id: null,
         generation: null,
         game_character_id: null
@@ -152,63 +163,30 @@ export default {
       this.characterGames = await CharacterGamesApi.list(id)
     },
     async onAddSubmit (evt) {
-      this.busy = true
+      const game = this.gameOptions.find(option => option.value === this.model.game_id)
+      const item = { ...this.model, ...{ character_game_id: null, name: game.text } }
+      const index = this.characterGames.push(item) - 1
 
       try {
         const response = await CharacterGamesApi.post(this.id, this.model)
-        this.$toasted.success(response.data, { icon: 'check_circle_outline' })
-        this.characterGames.push(response.data)
         this.resetModel()
+        this.$toasted.success(`Game Character ${response.data} created`, { icon: 'check_circle_outline' })
+        this.characterGames[index].character_game_id = response.data
       } catch (ex) {
         this.$toasted.error(ex.message, { icon: 'highlight_off' })
+        this.characterGames.splice(index, 1)
       }
-
-      this.busy = false
 
       evt.preventDefault()
     },
     resetModel () {
-      this.model.game = null
       this.model.game_id = null
       this.model.generation = null
       this.model.game_character_id = null
     },
     onAddReset (evt) {
-      evt.preventDefault()
-
       this.resetModel()
-
-      // Trick to reset/clear native browser form validation state
-      this.showAdd = false
-      this.$nextTick(() => {
-        this.showAdd = true
-      })
-    },
-    onSave (evt) {
-
-    },
-    async onRemove (index) {
-      const item = this.characterGames[index]
-      this.characterGames.splice(index, 1)
-
-      this.busy = true
-
-      try {
-        const response = await CharacterGamesApi.remove(this.id, item.game_id)
-        this.$toasted.success(response.data, { icon: 'check_circle_outline' })
-      } catch (ex) {
-        this.characterGames.push(item)
-        this.$toasted.error(ex.message, { icon: 'highlight_off' })
-      }
-
-      this.busy = false
-    },
-    onAddClick () {
-      this.showAdd = true
-      this.showEdit = false
-    },
-    onEditSubmit () {
-
+      evt.preventDefault()
     },
     onEditClick (index) {
       this.characterGameModels[index].isEditing = true
@@ -217,6 +195,36 @@ export default {
     onCancelClick (index) {
       this.characterGameModels[index].isEditing = false
       console.log('Editing', index, this.characterGameModels[index].isEditing)
+    },
+    async onDelete (args) {
+      const item = this.characterGames[args.index]
+      this.characterGames.splice(args.index, 1)
+
+      try {
+        const response = await CharacterGamesApi.remove(this.id, args.gameId)
+        this.$toasted.success(response.data, { icon: 'check_circle_outline' })
+      } catch (ex) {
+        this.characterGames.push(item)
+        this.$toasted.error(ex.message, { icon: 'highlight_off' })
+      }
+    },
+    async onUpdate (args) {
+      const oldItem = this.characterGames[args.index]
+      const newItem = {
+        name: args.model.name,
+        character_id: args.model.character_id,
+        game_id: args.model.game_id,
+        character_game_id: args.model.character_game_id,
+        generation: args.model.generation
+      }
+      this.characterGames[args.index] = newItem
+      try {
+        const response = await CharacterGamesApi.put(this.id, args.model.game_id, args.model)
+        this.$toasted.success(response.data, { icon: 'check_circle_outline' })
+      } catch (ex) {
+        this.$toasted.error(ex.message, { icon: 'highlight_off' })
+        this.characterGames[args.index] = oldItem
+      }
     }
   }
 }
@@ -227,5 +235,11 @@ export default {
   vertical-align: middle;
   cursor: pointer;
   color: #000;
+}
+.inline-primary {
+  min-width: 50px;
+}
+.inline-secondary {
+  min-width: 60px;
 }
 </style>

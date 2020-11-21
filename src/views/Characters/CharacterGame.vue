@@ -4,15 +4,27 @@
       <b-col><label style="padding: 0.25rem 0.5rem;">{{ model.name }}</label></b-col>
       <b-col><label style="padding: 0.25rem 0.5rem;">{{ model.generation }}</label></b-col>
       <b-col><label style="padding: 0.25rem 0.5rem;">{{ model.game_character_id }}</label></b-col>
-      <b-col><b-button variant="info" size="sm" v-on:click="onEditClick()">Edit</b-button></b-col>
+      <b-col>
+        <b-button
+          variant="info"
+          class="mb-2 mr-sm-2 mb-sm-0 inline-primary"
+          size="sm"
+          v-on:click="onEditClick()">Edit</b-button>
+        <b-button
+          variant="danger"
+          class="inline-secondary"
+          size="sm"
+          v-on:click="onDeleteClick()">Delete</b-button>
+      </b-col>
     </b-row>
-    <b-form @submit="onSave" v-show="isEditing">
+    <b-form @submit="onSaveClick" v-show="isEditing">
       <b-row>
         <b-col>
-          <b-form-select
+          <!-- <b-form-select
             v-model="model.game_id"
             :options="games"
-            size="sm"></b-form-select>
+            size="sm"></b-form-select> -->
+            <label style="padding: 0.25rem 0.5rem;">{{ model.name }}</label>
         </b-col>
         <b-col>
           <b-form-input
@@ -30,9 +42,11 @@
           <b-button
             type="submit"
             variant="primary"
+            class="mb-2 mr-sm-2 mb-sm-0 inline-primary"
             size="sm">Save</b-button>
           <b-button
             variant="danger"
+            class="inline-secondary"
             size="sm"
             v-on:click="onCancelClick()">Cancel</b-button>
         </b-col>
@@ -45,6 +59,9 @@
 export default {
   name: 'CharacterGame',
   props: {
+    index: {
+      type: Number
+    },
     item: {
       type: Object
     },
@@ -62,16 +79,26 @@ export default {
     onEditClick () {
       this.isEditing = true
     },
+    onDeleteClick () {
+      this.isEditing = false
+      this.$emit('delete', { index: this.index, gameId: this.model.game_id })
+    },
     onCancelClick () {
       this.isEditing = false
     },
-    onSave (evt) {
-      console.log(this.model)
+    onSaveClick (evt) {
+      this.isEditing = false
+      this.$emit('update', { index: this.index, model: this.model })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
+.inline-primary {
+  min-width: 50px;
+}
+.inline-secondary {
+  min-width: 60px;
+}
 </style>
