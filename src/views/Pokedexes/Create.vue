@@ -44,6 +44,15 @@
                     v-model="model.alternate_name"
                   />
                 </div>
+                <div class="form-group">
+                  <label for="inputGeneration">Generation</label>
+                  <input
+                    type="number"
+                    class="form-control form-control-lg"
+                    id="inputGeneration"
+                    v-model="model.generation"
+                  />
+                </div>
               </fieldset>
             </form>
           </div>

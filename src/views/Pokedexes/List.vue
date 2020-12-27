@@ -31,6 +31,7 @@
               <th scope="col">Name ID</th>
               <th scope="col">Name</th>
               <th scope="col">Alternate Name</th>
+              <th scope="col">Generation</th>
             </tr>
           </thead>
           <tbody>
@@ -44,6 +45,7 @@
               <td scope="col">{{ dex.name_id }}</td>
               <td scope="col">{{ dex.name }}</td>
               <td scope="col">{{ dex.alternate_name }}</td>
+              <td scope="col">{{ dex.generation }}</td>
             </tr>
           </tbody>
         </table>

@@ -54,6 +54,15 @@
                     v-model="model.alternate_name"
                   />
                 </div>
+                <div class="form-group">
+                  <label for="inputGeneration">Generation</label>
+                  <input
+                    type="number"
+                    class="form-control form-control-lg"
+                    id="inputGeneration"
+                    v-model="model.generation"
+                  />
+                </div>
               </fieldset>
             </form>
           </div>
@@ -75,6 +84,7 @@
             <b-list-group>
               <b-list-group>
                 <b-list-group-item v-for="g in games" v-bind:key="g.game_id">
+                  <b-badge class="float-right" pill variant="dark">{{ g.generation }}</b-badge>
                   <strong>{{ g.name }}</strong>
                 </b-list-group-item>
               </b-list-group>
