@@ -32,3 +32,4 @@ npm run dev                  # http://localhost:8080
   placeholder.
 - `src/components/Layout.tsx` — navbar and page shell.
 - `src/lib/config.ts` — runtime config (`VITE_API_URL`).
+- `docs/file-guide.md` — what each file is for, updated every migration phase.
