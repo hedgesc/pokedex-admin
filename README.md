@@ -4,7 +4,7 @@ Admin site for managing Pok√©dexes, games, characters and moves against the Pok√
 
 The app is being migrated from Vue 2 to React 19 + TypeScript + Vite. The React app lives at the
 repository root; the original Vue app is in [`legacy/`](legacy/) until every screen is ported.
-The last Vue-only commit is tagged `vue2-final`.
+The last Vue-only commit is `e297e70` (to be tagged `vue2-final`).
 
 ## Getting started
 
