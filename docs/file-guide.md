@@ -57,3 +57,43 @@ Starting point: `npm create vite@latest -- --template react-ts`. The Vue app mov
 | `public/favicon.ico` | Browser-tab icon; files in `public/` are served as-is.     |
 | `legacy/`            | The original Vue 2 app, kept for comparison until cutover. |
 | `docs/file-guide.md` | This file.                                                 |
+
+## Phase 1: API layer
+
+Typed access to the REST API, with TanStack Query handling loading, caching and refetching.
+No screens use it yet; Phase 2 starts wiring pages to these hooks.
+
+### Added
+
+| File                              | Purpose                                                                                                                            |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `src/api/http.ts`                 | The one place that calls `fetch`: builds URLs from `VITE_API_URL`, sends JSON, parses responses and throws `ApiError` on failures. |
+| `src/api/types.ts`                | TypeScript shapes of every API resource (`Game`, `Move`, `Character`, …) and their create/update inputs.                           |
+| `src/api/games.ts`                | Functions for the `games` endpoints (list, get, create, update, remove).                                                           |
+| `src/api/pokedexes.ts`            | Functions for Pokédexes, which the API calls `game-groups`, including their games.                                                 |
+| `src/api/moves.ts`                | Functions for the `moves` endpoints, with paging.                                                                                  |
+| `src/api/characters.ts`           | Functions for the `characters` endpoints, as a full list or paged.                                                                 |
+| `src/api/characterGames.ts`       | Functions for the games a character appears in.                                                                                    |
+| `src/api/characterMoves.ts`       | Functions for the moves a character learns, and marking moves as suggested.                                                        |
+| `src/api/index.ts`                | Re-exports everything in `src/api/` so pages import from one place.                                                                |
+| `src/constants/regions.ts`        | List of regions, plus a `Region` type derived from it.                                                                             |
+| `src/constants/characterTypes.ts` | List of character types (Fire, Water, …), plus a `CharacterType` type.                                                             |
+| `src/constants/moveCategories.ts` | List of move categories, plus a `MoveCategory` type.                                                                               |
+| `src/queries/keys.ts`             | Every TanStack Query cache key in one place, so saving data refreshes the right screens.                                           |
+| `src/queries/games.ts`            | React hooks for games, e.g. `useGames()` to load and `useCreateGame()` to save.                                                    |
+| `src/queries/pokedexes.ts`        | React hooks for Pokédexes and their games.                                                                                         |
+| `src/queries/moves.ts`            | React hooks for moves, including a paged list.                                                                                     |
+| `src/queries/characters.ts`       | React hooks for characters, their games and their moves.                                                                           |
+| `src/lib/queryClient.ts`          | Creates the TanStack Query client with app-wide defaults (cache time, retries).                                                    |
+| `src/test/server.ts`              | Mock API server (MSW) that tests use instead of the real API.                                                                      |
+| `src/api/http.test.ts`            | Tests for URL building, response parsing and error handling.                                                                       |
+| `src/api/resources.test.ts`       | Tests that each API module calls the right endpoint.                                                                               |
+| `src/queries/games.test.tsx`      | Tests for the query hooks: loading, errors and refreshing after a save.                                                            |
+
+### Updated
+
+| File                | What changed                                                                  |
+| ------------------- | ----------------------------------------------------------------------------- |
+| `src/main.tsx`      | Wraps the app in `QueryClientProvider` so every page can use the query hooks. |
+| `src/test/setup.ts` | Starts the mock API server before tests and resets it after each one.         |
+| `package.json`      | Added `@tanstack/react-query`, plus `msw` for tests.                          |
