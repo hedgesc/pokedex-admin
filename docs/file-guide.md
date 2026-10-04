@@ -97,3 +97,4 @@ No screens use it yet; Phase 2 starts wiring pages to these hooks.
 | `src/main.tsx`      | Wraps the app in `QueryClientProvider` so every page can use the query hooks. |
 | `src/test/setup.ts` | Starts the mock API server before tests and resets it after each one.         |
 | `package.json`      | Added `@tanstack/react-query`, plus `msw` for tests.                          |
+| `README.md`         | Layout section lists `src/api/` and `src/queries/`.                           |
