@@ -3,10 +3,13 @@
 What each file in the React + TypeScript + Vite app is for, built up phase by phase during the
 Vue 2 migration. Read top to bottom for the full picture.
 
-Each phase after Phase 0 has two tables:
+Each phase after Phase 0 has these tables (Phase 0 lists every file instead of Added/Updated):
 
 - **Added**: each new file and its purpose.
 - **Updated**: each existing file and what this phase changed in it.
+- **Packages**: each npm package the phase installed and what it's for. _Runtime_ packages ship
+  to the browser (`dependencies`); _dev_ packages are only for building, linting and testing
+  (`devDependencies`).
 
 ## Phase 0: Scaffold
 
@@ -58,6 +61,28 @@ Starting point: `npm create vite@latest -- --template react-ts`. The Vue app mov
 | `legacy/`            | The original Vue 2 app, kept for comparison until cutover. |
 | `docs/file-guide.md` | This file.                                                 |
 
+### Packages
+
+| Package                            | Type    | Purpose                                                                              |
+| ---------------------------------- | ------- | ------------------------------------------------------------------------------------ |
+| `react`                            | Runtime | The UI library: components, state and hooks.                                         |
+| `react-dom`                        | Runtime | Renders React components into the browser page.                                      |
+| `react-router`                     | Runtime | Maps URLs to pages and handles navigation without full page reloads.                 |
+| `bootstrap`                        | Runtime | Bootstrap 5 CSS (grid, buttons, forms), the same look as the Vue app.                |
+| `react-bootstrap`                  | Runtime | Bootstrap components written as React components (`Navbar`, `Row`, `ListGroup`, …).  |
+| `vite`                             | Dev     | Dev server with hot reload, and the production bundler.                              |
+| `@vitejs/plugin-react`             | Dev     | Teaches Vite to compile JSX and enables React Fast Refresh.                          |
+| `typescript`                       | Dev     | The TypeScript compiler, used for type checking (`npm run typecheck`).               |
+| `@types/react`, `@types/react-dom` | Dev     | Type definitions so TypeScript understands React's APIs.                             |
+| `@types/node`                      | Dev     | Type definitions for Node, used by `vite.config.ts`.                                 |
+| `oxlint`                           | Dev     | Linter that catches bugs and bad patterns (`npm run lint`).                          |
+| `prettier`                         | Dev     | Code formatter that keeps style consistent (`npm run format`).                       |
+| `vitest`                           | Dev     | Test runner; shares Vite's config so tests compile like the app.                     |
+| `jsdom`                            | Dev     | A simulated browser so tests can render components without a real one.               |
+| `@testing-library/react`           | Dev     | Renders components in tests and finds elements the way a user would (by text, role). |
+| `@testing-library/user-event`      | Dev     | Simulates real user actions in tests (clicks, typing).                               |
+| `@testing-library/jest-dom`        | Dev     | Extra test assertions for the DOM, like `toBeInTheDocument()`.                       |
+
 ## Phase 1: API layer
 
 Typed access to the REST API, with TanStack Query handling loading, caching and refetching.
@@ -96,5 +121,12 @@ No screens use it yet; Phase 2 starts wiring pages to these hooks.
 | ------------------- | ----------------------------------------------------------------------------- |
 | `src/main.tsx`      | Wraps the app in `QueryClientProvider` so every page can use the query hooks. |
 | `src/test/setup.ts` | Starts the mock API server before tests and resets it after each one.         |
-| `package.json`      | Added `@tanstack/react-query`, plus `msw` for tests.                          |
+| `package.json`      | Lists the new packages below.                                                 |
 | `README.md`         | Layout section lists `src/api/` and `src/queries/`.                           |
+
+### Packages
+
+| Package                 | Type    | Purpose                                                                                                     |
+| ----------------------- | ------- | ----------------------------------------------------------------------------------------------------------- |
+| `@tanstack/react-query` | Runtime | Fetches server data and caches it: loading and error states, refetching, and refreshing lists after a save. |
+| `msw`                   | Dev     | Mock Service Worker: intercepts network requests in tests and answers with fake API responses.              |
