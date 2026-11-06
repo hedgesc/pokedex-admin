@@ -1,4 +1,4 @@
-export { ApiError } from './http'
+export { ApiError, errorMessage } from './http'
 export { characterGamesApi } from './characterGames'
 export { characterMovesApi } from './characterMoves'
 export { charactersApi } from './characters'

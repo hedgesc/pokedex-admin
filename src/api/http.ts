@@ -49,6 +49,11 @@ export async function request<T>(
   return data as T
 }
 
+/** Message to show the user for a failed request or an unexpected throw. */
+export function errorMessage(error: unknown): string {
+  return error instanceof Error && error.message ? error.message : 'Something went wrong'
+}
+
 function errorText(data: unknown): string | undefined {
   if (typeof data === 'string') return data || undefined
   if (data && typeof data === 'object' && 'message' in data && typeof data.message === 'string') {

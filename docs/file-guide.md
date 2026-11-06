@@ -130,3 +130,38 @@ No screens use it yet; Phase 2 starts wiring pages to these hooks.
 | ----------------------- | ------- | ----------------------------------------------------------------------------------------------------------- |
 | `@tanstack/react-query` | Runtime | Fetches server data and caches it: loading and error states, refetching, and refreshing lists after a save. |
 | `msw`                   | Dev     | Mock Service Worker: intercepts network requests in tests and answers with fake API responses.              |
+
+## Phase 2: Games
+
+The first screens wired to the API. List, create, and edit games, and show the API's success and
+error messages in toasts. Delete asks for confirmation before it runs.
+
+### Added
+
+| File                               | Purpose                                                                                        |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `src/components/ToastProvider.tsx` | Success, error, and confirm toasts, matching the Vue app's duration and bottom-right position. |
+| `src/pages/games/List.tsx`         | All games. A row opens that game's edit page.                                                  |
+| `src/pages/games/Create.tsx`       | Form to create a game, then return to the list.                                                |
+| `src/pages/games/Edit.tsx`         | Form to edit or delete a game.                                                                 |
+| `src/pages/games/GameForm.tsx`     | Shared fields: generation, name id, name, and regions.                                         |
+| `src/pages/games/form.ts`          | Form value type, and converting between the form and the API shape.                            |
+| `src/pages/games/games.test.tsx`   | Tests for the list, create, edit, delete, and error toasts.                                    |
+| `src/test/render.tsx`              | Renders a route with the query client and toasts, for page tests.                              |
+
+### Updated
+
+| File                        | What changed                                                         |
+| --------------------------- | -------------------------------------------------------------------- |
+| `src/routes.tsx`            | Games list, create, and edit render the real pages.                  |
+| `src/components/Layout.tsx` | Names the navbar "Main" so tests can tell it apart from breadcrumbs. |
+| `src/routes.test.tsx`       | Expects the Games page titles, and gives those routes a mock API.    |
+| `src/main.tsx`              | Wraps the app in `ToastProvider`.                                    |
+| `src/index.css`             | Row hover cursor, and the form action spacing from the Vue app.      |
+| `src/api/http.ts`           | `errorMessage` turns a thrown error into text for an alert or toast. |
+| `src/api/index.ts`          | Re-exports `errorMessage`.                                           |
+| `README.md`                 | Layout section notes that Games is ported.                           |
+
+### Packages
+
+No new packages. Toasts and the region picker use Bootstrap, which Phase 0 already installed.
