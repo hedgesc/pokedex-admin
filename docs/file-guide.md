@@ -3,10 +3,13 @@
 What each file in the React + TypeScript + Vite app is for, built up phase by phase during the
 Vue 2 migration. Read top to bottom for the full picture.
 
-Each phase after Phase 0 has two tables:
+Each phase after Phase 0 has these tables (Phase 0 lists every file instead of Added/Updated):
 
 - **Added**: each new file and its purpose.
 - **Updated**: each existing file and what this phase changed in it.
+- **Packages**: each npm package the phase installed and what it's for. _Runtime_ packages ship
+  to the browser (`dependencies`); _dev_ packages are only for building, linting and testing
+  (`devDependencies`).
 
 ## Phase 0: Scaffold
 
@@ -57,3 +60,73 @@ Starting point: `npm create vite@latest -- --template react-ts`. The Vue app mov
 | `public/favicon.ico` | Browser-tab icon; files in `public/` are served as-is.     |
 | `legacy/`            | The original Vue 2 app, kept for comparison until cutover. |
 | `docs/file-guide.md` | This file.                                                 |
+
+### Packages
+
+| Package                            | Type    | Purpose                                                                              |
+| ---------------------------------- | ------- | ------------------------------------------------------------------------------------ |
+| `react`                            | Runtime | The UI library: components, state and hooks.                                         |
+| `react-dom`                        | Runtime | Renders React components into the browser page.                                      |
+| `react-router`                     | Runtime | Maps URLs to pages and handles navigation without full page reloads.                 |
+| `bootstrap`                        | Runtime | Bootstrap 5 CSS (grid, buttons, forms), the same look as the Vue app.                |
+| `react-bootstrap`                  | Runtime | Bootstrap components written as React components (`Navbar`, `Row`, `ListGroup`, …).  |
+| `vite`                             | Dev     | Dev server with hot reload, and the production bundler.                              |
+| `@vitejs/plugin-react`             | Dev     | Teaches Vite to compile JSX and enables React Fast Refresh.                          |
+| `typescript`                       | Dev     | The TypeScript compiler, used for type checking (`npm run typecheck`).               |
+| `@types/react`, `@types/react-dom` | Dev     | Type definitions so TypeScript understands React's APIs.                             |
+| `@types/node`                      | Dev     | Type definitions for Node, used by `vite.config.ts`.                                 |
+| `oxlint`                           | Dev     | Linter that catches bugs and bad patterns (`npm run lint`).                          |
+| `prettier`                         | Dev     | Code formatter that keeps style consistent (`npm run format`).                       |
+| `vitest`                           | Dev     | Test runner; shares Vite's config so tests compile like the app.                     |
+| `jsdom`                            | Dev     | A simulated browser so tests can render components without a real one.               |
+| `@testing-library/react`           | Dev     | Renders components in tests and finds elements the way a user would (by text, role). |
+| `@testing-library/user-event`      | Dev     | Simulates real user actions in tests (clicks, typing).                               |
+| `@testing-library/jest-dom`        | Dev     | Extra test assertions for the DOM, like `toBeInTheDocument()`.                       |
+
+## Phase 1: API layer
+
+Typed access to the REST API, with TanStack Query handling loading, caching and refetching.
+No screens use it yet; Phase 2 starts wiring pages to these hooks.
+
+### Added
+
+| File                              | Purpose                                                                                                                            |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `src/api/http.ts`                 | The one place that calls `fetch`: builds URLs from `VITE_API_URL`, sends JSON, parses responses and throws `ApiError` on failures. |
+| `src/api/types.ts`                | TypeScript shapes of every API resource (`Game`, `Move`, `Character`, …) and their create/update inputs.                           |
+| `src/api/games.ts`                | Functions for the `games` endpoints (list, get, create, update, remove).                                                           |
+| `src/api/pokedexes.ts`            | Functions for Pokédexes, which the API calls `game-groups`, including their games.                                                 |
+| `src/api/moves.ts`                | Functions for the `moves` endpoints, with paging.                                                                                  |
+| `src/api/characters.ts`           | Functions for the `characters` endpoints, as a full list or paged.                                                                 |
+| `src/api/characterGames.ts`       | Functions for the games a character appears in.                                                                                    |
+| `src/api/characterMoves.ts`       | Functions for the moves a character learns, and marking moves as suggested.                                                        |
+| `src/api/index.ts`                | Re-exports everything in `src/api/` so pages import from one place.                                                                |
+| `src/constants/regions.ts`        | List of regions, plus a `Region` type derived from it.                                                                             |
+| `src/constants/characterTypes.ts` | List of character types (Fire, Water, …), plus a `CharacterType` type.                                                             |
+| `src/constants/moveCategories.ts` | List of move categories, plus a `MoveCategory` type.                                                                               |
+| `src/queries/keys.ts`             | Every TanStack Query cache key in one place, so saving data refreshes the right screens.                                           |
+| `src/queries/games.ts`            | React hooks for games, e.g. `useGames()` to load and `useCreateGame()` to save.                                                    |
+| `src/queries/pokedexes.ts`        | React hooks for Pokédexes and their games.                                                                                         |
+| `src/queries/moves.ts`            | React hooks for moves, including a paged list.                                                                                     |
+| `src/queries/characters.ts`       | React hooks for characters, their games and their moves.                                                                           |
+| `src/lib/queryClient.ts`          | Creates the TanStack Query client with app-wide defaults (cache time, retries).                                                    |
+| `src/test/server.ts`              | Mock API server (MSW) that tests use instead of the real API.                                                                      |
+| `src/api/http.test.ts`            | Tests for URL building, response parsing and error handling.                                                                       |
+| `src/api/resources.test.ts`       | Tests that each API module calls the right endpoint.                                                                               |
+| `src/queries/games.test.tsx`      | Tests for the query hooks: loading, errors and refreshing after a save.                                                            |
+
+### Updated
+
+| File                | What changed                                                                  |
+| ------------------- | ----------------------------------------------------------------------------- |
+| `src/main.tsx`      | Wraps the app in `QueryClientProvider` so every page can use the query hooks. |
+| `src/test/setup.ts` | Starts the mock API server before tests and resets it after each one.         |
+| `package.json`      | Lists the new packages below.                                                 |
+| `README.md`         | Layout section lists `src/api/` and `src/queries/`.                           |
+
+### Packages
+
+| Package                 | Type    | Purpose                                                                                                     |
+| ----------------------- | ------- | ----------------------------------------------------------------------------------------------------------- |
+| `@tanstack/react-query` | Runtime | Fetches server data and caches it: loading and error states, refetching, and refreshing lists after a save. |
+| `msw`                   | Dev     | Mock Service Worker: intercepts network requests in tests and answers with fake API responses.              |
