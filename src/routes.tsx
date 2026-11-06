@@ -6,6 +6,9 @@ import Placeholder from './pages/Placeholder'
 import GameCreate from './pages/games/Create'
 import GameEdit from './pages/games/Edit'
 import GameList from './pages/games/List'
+import MoveCreate from './pages/moves/Create'
+import MoveEdit from './pages/moves/Edit'
+import MoveList from './pages/moves/List'
 
 // Mirrors legacy/src/router/index.js. Each Placeholder is replaced by the real
 // page as that section is ported.
@@ -29,9 +32,9 @@ export const routes: RouteObject[] = [
       { path: 'character/detail/:id', element: page('Character Detail') },
       { path: 'character/create', element: page('Create Character') },
 
-      { path: 'move/list', element: page('Moves') },
-      { path: 'move/edit/:id', element: page('Edit Move') },
-      { path: 'move/create', element: page('Create Move') },
+      { path: 'move/list', element: <MoveList /> },
+      { path: 'move/edit/:id', element: <MoveEdit /> },
+      { path: 'move/create', element: <MoveCreate /> },
 
       { path: 'pokedex/list', element: page('Pokédexes') },
       { path: 'pokedex/edit/:id', element: page('Edit Pokédex') },

@@ -165,3 +165,31 @@ error messages in toasts. Delete asks for confirmation before it runs.
 ### Packages
 
 No new packages. Toasts and the region picker use Bootstrap, which Phase 0 already installed.
+
+## Phase 3: Moves
+
+List, create, and edit moves. The list is paged, eight at a time, using the `useMovesPage` hook
+from Phase 1.
+
+### Added
+
+| File                             | Purpose                                                                                |
+| -------------------------------- | -------------------------------------------------------------------------------------- |
+| `src/pages/moves/List.tsx`       | One page of moves. A row opens that move's edit page. Page controls sit in the footer. |
+| `src/pages/moves/Create.tsx`     | Form to create a move, then return to the list.                                        |
+| `src/pages/moves/Edit.tsx`       | Form to edit or delete a move.                                                         |
+| `src/pages/moves/MoveForm.tsx`   | Shared fields: name, name id, generation, power, accuracy, PP, type, and category.     |
+| `src/pages/moves/form.ts`        | Form value type. Empty power, accuracy, and PP are saved as `null`.                    |
+| `src/pages/moves/moves.test.tsx` | Tests for paging, create, edit, delete, and error toasts.                              |
+
+### Updated
+
+| File                  | What changed                                                      |
+| --------------------- | ----------------------------------------------------------------- |
+| `src/routes.tsx`      | Moves list, create, and edit render the real pages.               |
+| `src/routes.test.tsx` | Expects the Moves page titles, and gives those routes a mock API. |
+| `README.md`           | Layout section notes that Moves is ported.                        |
+
+### Packages
+
+No new packages.
