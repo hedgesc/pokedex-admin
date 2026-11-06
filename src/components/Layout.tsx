@@ -19,7 +19,7 @@ export default function Layout() {
 
   return (
     <>
-      <Navbar bg="dark" data-bs-theme="dark" expand="md">
+      <Navbar aria-label="Main" bg="dark" data-bs-theme="dark" expand="md">
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
             <img src={logo} width={32} height={32} alt="Pokédex Admin" />

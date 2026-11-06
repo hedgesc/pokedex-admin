@@ -2,3 +2,25 @@
   padding-top: 15px;
   padding-bottom: 15px;
 }
+
+.table.table-hover tbody tr {
+  cursor: pointer;
+}
+
+.card > .card-body > .table {
+  margin-bottom: 0;
+}
+
+.form-actions {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.form-actions .btn-primary {
+  width: 150px;
+}
+
+.form-actions .a-cancel {
+  padding: 0 12px;
+  line-height: 38px;
+}

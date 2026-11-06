@@ -28,8 +28,10 @@ npm run dev                  # http://localhost:8080
 
 ## Layout
 
-- `src/routes.tsx` — every route, mirroring `legacy/src/router/index.js`. Unported pages render a
-  placeholder.
+- `src/routes.tsx` — every route, mirroring `legacy/src/router/index.js`. Games is ported;
+  other pages still render a placeholder.
+- `src/pages/games/` — Games list, create, and edit.
+- `src/components/ToastProvider.tsx` — success, error, and confirm toasts.
 - `src/components/Layout.tsx` — navbar and page shell.
 - `src/lib/config.ts` — runtime config (`VITE_API_URL`).
 - `src/api/` — typed functions for each API endpoint.

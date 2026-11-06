@@ -3,6 +3,9 @@ import Layout from './components/Layout'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Placeholder from './pages/Placeholder'
+import GameCreate from './pages/games/Create'
+import GameEdit from './pages/games/Edit'
+import GameList from './pages/games/List'
 
 // Mirrors legacy/src/router/index.js. Each Placeholder is replaced by the real
 // page as that section is ported.
@@ -15,9 +18,9 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <Home /> },
 
-      { path: 'game/list', element: page('Games') },
-      { path: 'game/edit/:id', element: page('Edit Game') },
-      { path: 'game/create', element: page('Create Game') },
+      { path: 'game/list', element: <GameList /> },
+      { path: 'game/edit/:id', element: <GameEdit /> },
+      { path: 'game/create', element: <GameCreate /> },
 
       { path: 'character/list', element: page('Characters') },
       { path: 'character/edit/:id', element: page('Edit Character') },
