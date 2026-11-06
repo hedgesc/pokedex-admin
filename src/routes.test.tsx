@@ -1,7 +1,7 @@
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
-import type { Game, Move } from './api'
+import type { Character, Game, Move } from './api'
 import { api, server } from './test/server'
 import { renderApp } from './test/render'
 
@@ -25,12 +25,39 @@ const tackle: Move = {
   pp: 35,
 }
 
+const bulbasaur: Character = {
+  character_id: 4,
+  name_id: 'bulbasaur',
+  name: 'Bulbasaur',
+  generation: 1,
+  types: ['Grass', 'Poison'],
+  evolves_from_id: null,
+  image_url: null,
+  hp: 45,
+  attack: 49,
+  defense: 49,
+  special_attack: 65,
+  special_defense: 65,
+  speed: 45,
+  total: 318,
+}
+
 beforeEach(() => {
   server.use(
     http.get(api('games'), () => HttpResponse.json([red])),
     http.get(api('games/:id'), () => HttpResponse.json(red)),
     http.get(api('moves'), () => HttpResponse.json({ items: [tackle], total_count: 1 })),
     http.get(api('moves/:id'), () => HttpResponse.json(tackle)),
+    http.get(api('characters'), ({ request }) => {
+      const url = new URL(request.url)
+      if (url.searchParams.has('limit')) {
+        return HttpResponse.json({ items: [bulbasaur], total_count: 1 })
+      }
+      return HttpResponse.json([bulbasaur])
+    }),
+    http.get(api('characters/:id'), () => HttpResponse.json(bulbasaur)),
+    http.get(api('characters/:id/games'), () => HttpResponse.json([])),
+    http.get(api('characters/:id/moves'), () => HttpResponse.json([])),
   )
 })
 
@@ -45,7 +72,12 @@ describe('routes', () => {
     ['/game/list', 'All Games', 'Games'],
     ['/game/edit/12', 'Editing Game 12', 'Games'],
     ['/game/create', 'Create a Game', 'Games'],
-    ['/character/edit/4/moves', 'Character Moves', 'Characters'],
+    ['/character/list', 'All Characters', 'Characters'],
+    ['/character/edit/4', 'Editing Bulbasaur', 'Characters'],
+    ['/character/edit/4/games', 'Games featuring Bulbasaur', 'Characters'],
+    ['/character/edit/4/moves', 'Moves available to Bulbasaur', 'Characters'],
+    ['/character/detail/4', 'Bulbasaur', 'Characters'],
+    ['/character/create', 'Create a Character', 'Characters'],
     ['/move/list', 'All Moves', 'Moves'],
     ['/move/edit/4', 'Editing Move 4', 'Moves'],
     ['/move/create', 'Create a Move', 'Moves'],
@@ -64,6 +96,12 @@ describe('routes', () => {
     }
     if (path === '/move/list') {
       expect(await screen.findByRole('cell', { name: 'Tackle' })).toBeInTheDocument()
+    }
+    if (path === '/character/list') {
+      expect(await screen.findByRole('cell', { name: 'Bulbasaur' })).toBeInTheDocument()
+    }
+    if (path === '/character/edit/4') {
+      expect(await screen.findByDisplayValue('Bulbasaur')).toBeInTheDocument()
     }
 
     const nav = screen.getByRole('navigation', { name: 'Main' })
