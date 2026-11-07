@@ -1,7 +1,7 @@
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
-import type { Character, Game, Move } from './api'
+import type { Character, Game, Move, Pokedex } from './api'
 import { api, server } from './test/server'
 import { renderApp } from './test/render'
 
@@ -42,6 +42,14 @@ const bulbasaur: Character = {
   total: 318,
 }
 
+const kanto: Pokedex = {
+  game_group_id: 2,
+  name_id: 'kanto',
+  name: 'Kanto',
+  alternate_name: null,
+  generation: 1,
+}
+
 beforeEach(() => {
   server.use(
     http.get(api('games'), () => HttpResponse.json([red])),
@@ -58,6 +66,9 @@ beforeEach(() => {
     http.get(api('characters/:id'), () => HttpResponse.json(bulbasaur)),
     http.get(api('characters/:id/games'), () => HttpResponse.json([])),
     http.get(api('characters/:id/moves'), () => HttpResponse.json([])),
+    http.get(api('game-groups'), () => HttpResponse.json([kanto])),
+    http.get(api('game-groups/:id'), () => HttpResponse.json(kanto)),
+    http.get(api('game-groups/:id/games'), () => HttpResponse.json([red])),
   )
 })
 
@@ -81,7 +92,10 @@ describe('routes', () => {
     ['/move/list', 'All Moves', 'Moves'],
     ['/move/edit/4', 'Editing Move 4', 'Moves'],
     ['/move/create', 'Create a Move', 'Moves'],
-    ['/pokedex/edit/2/games', 'Pokédex Games', 'Pokédexes'],
+    ['/pokedex/list', 'All Pokédexes', 'Pokédexes'],
+    ['/pokedex/edit/2', 'Editing Pokédex 2', 'Pokédexes'],
+    ['/pokedex/edit/2/games', 'Manage Games', 'Pokédexes'],
+    ['/pokedex/create', 'Create a Pokédex', 'Pokédexes'],
   ])('%s renders "%s" and highlights %s in the navbar', async (path, title, navLabel) => {
     renderApp(path)
     expect(await screen.findByRole('heading', { name: title })).toBeInTheDocument()
@@ -102,6 +116,12 @@ describe('routes', () => {
     }
     if (path === '/character/edit/4') {
       expect(await screen.findByDisplayValue('Bulbasaur')).toBeInTheDocument()
+    }
+    if (path === '/pokedex/list') {
+      expect(await screen.findByRole('cell', { name: 'Kanto' })).toBeInTheDocument()
+    }
+    if (path === '/pokedex/edit/2') {
+      expect(await screen.findByDisplayValue('Kanto')).toBeInTheDocument()
     }
 
     const nav = screen.getByRole('navigation', { name: 'Main' })

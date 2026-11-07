@@ -2,24 +2,24 @@ import type { RouteObject } from 'react-router'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
-import Placeholder from './pages/Placeholder'
-import GameCreate from './pages/games/Create'
-import GameEdit from './pages/games/Edit'
-import GameList from './pages/games/List'
 import CharacterCreate from './pages/characters/Create'
 import CharacterDetail from './pages/characters/Detail'
 import CharacterEdit from './pages/characters/Edit'
 import CharacterGames from './pages/characters/Games'
 import CharacterList from './pages/characters/List'
 import CharacterMoves from './pages/characters/Moves'
+import GameCreate from './pages/games/Create'
+import GameEdit from './pages/games/Edit'
+import GameList from './pages/games/List'
 import MoveCreate from './pages/moves/Create'
 import MoveEdit from './pages/moves/Edit'
 import MoveList from './pages/moves/List'
+import PokedexCreate from './pages/pokedexes/Create'
+import PokedexEdit from './pages/pokedexes/Edit'
+import PokedexGames from './pages/pokedexes/Games'
+import PokedexList from './pages/pokedexes/List'
 
-// Mirrors legacy/src/router/index.js. Each Placeholder is replaced by the real
-// page as that section is ported.
-const page = (title: string) => <Placeholder title={title} />
-
+// Mirrors legacy/src/router/index.js.
 export const routes: RouteObject[] = [
   {
     path: '/',
@@ -42,10 +42,10 @@ export const routes: RouteObject[] = [
       { path: 'move/edit/:id', element: <MoveEdit /> },
       { path: 'move/create', element: <MoveCreate /> },
 
-      { path: 'pokedex/list', element: page('Pokédexes') },
-      { path: 'pokedex/edit/:id', element: page('Edit Pokédex') },
-      { path: 'pokedex/edit/:id/games', element: page('Pokédex Games') },
-      { path: 'pokedex/create', element: page('Create Pokédex') },
+      { path: 'pokedex/list', element: <PokedexList /> },
+      { path: 'pokedex/edit/:id', element: <PokedexEdit /> },
+      { path: 'pokedex/edit/:id/games', element: <PokedexGames /> },
+      { path: 'pokedex/create', element: <PokedexCreate /> },
 
       { path: '*', element: <NotFound /> },
     ],

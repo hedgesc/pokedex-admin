@@ -227,3 +227,32 @@ paged five at a time. Saves and deletes use the toasts from Phase 2.
 ### Packages
 
 No new packages.
+
+## Phase 5: Pokédexes
+
+List, create, and edit Pokédexes, and manage the games that belong to one. The API calls these
+`game-groups`. Saves and deletes use the toasts from Phase 2.
+
+### Added
+
+| File                                     | Purpose                                                                    |
+| ---------------------------------------- | -------------------------------------------------------------------------- |
+| `src/pages/pokedexes/List.tsx`           | Every Pokédex. A row opens that Pokédex's edit page.                       |
+| `src/pages/pokedexes/Create.tsx`         | Form to create a Pokédex, then return to the list.                         |
+| `src/pages/pokedexes/Edit.tsx`           | Form to edit or delete a Pokédex, with the games it already contains.      |
+| `src/pages/pokedexes/Games.tsx`          | Add or remove games. Adding one that is already included shows an error.   |
+| `src/pages/pokedexes/PokedexForm.tsx`    | Shared fields: name id, name, alternate name, and generation.              |
+| `src/pages/pokedexes/form.ts`            | Form value type. An empty alternate name or generation is saved as `null`. |
+| `src/pages/pokedexes/pokedexes.test.tsx` | Tests for the list, create, edit, delete, and adding or removing games.    |
+
+### Updated
+
+| File                  | What changed                                                                         |
+| --------------------- | ------------------------------------------------------------------------------------ |
+| `src/routes.tsx`      | Pokédex list, create, edit, and games render the real pages. No placeholders remain. |
+| `src/routes.test.tsx` | Expects the Pokédex page titles, and gives those routes a mock API.                  |
+| `README.md`           | Layout section notes that Pokédexes are ported.                                      |
+
+### Packages
+
+No new packages.
