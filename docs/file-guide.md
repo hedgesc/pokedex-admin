@@ -193,3 +193,37 @@ from Phase 1.
 ### Packages
 
 No new packages.
+
+## Phase 4: Characters
+
+List, create, edit, and detail, plus the games and moves managed from a character. The list is
+paged five at a time. Saves and deletes use the toasts from Phase 2.
+
+### Added
+
+| File                                       | Purpose                                                                                     |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `src/pages/characters/List.tsx`            | One page of characters. A row opens that character's edit page.                             |
+| `src/pages/characters/Create.tsx`          | Form to create a character, then return to the list.                                        |
+| `src/pages/characters/Edit.tsx`            | Form to edit or delete a character, with links to its games and moves.                      |
+| `src/pages/characters/Detail.tsx`          | Read-only character, with an edit button.                                                   |
+| `src/pages/characters/Games.tsx`           | Add, edit, and remove the games a character appears in.                                     |
+| `src/pages/characters/Moves.tsx`           | Moves a character can learn, filtered by generation. At most four can be suggested.         |
+| `src/pages/characters/CharacterForm.tsx`   | Shared fields: stats, image, evolution, and types.                                          |
+| `src/pages/characters/form.ts`             | Form value type. Empty image and evolution are saved as `null`. A create can include an id. |
+| `src/pages/characters/SectionNav.tsx`      | Side links between detail, games, and moves.                                                |
+| `src/pages/characters/characters.test.tsx` | Tests for paging, create, edit, delete, games, and suggested moves.                         |
+
+### Updated
+
+| File                        | What changed                                                                  |
+| --------------------------- | ----------------------------------------------------------------------------- |
+| `src/routes.tsx`            | Character list, create, edit, detail, games, and moves render the real pages. |
+| `src/routes.test.tsx`       | Expects the Character page titles, and gives those routes a mock API.         |
+| `src/queries/characters.ts` | Create accepts an optional `character_id`, matching the Vue create form.      |
+| `src/index.css`             | Character list image size, and the type-tag colors from the Vue app.          |
+| `README.md`                 | Layout section notes that Characters is ported.                               |
+
+### Packages
+
+No new packages.

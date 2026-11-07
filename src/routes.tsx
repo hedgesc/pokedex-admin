@@ -6,6 +6,12 @@ import Placeholder from './pages/Placeholder'
 import GameCreate from './pages/games/Create'
 import GameEdit from './pages/games/Edit'
 import GameList from './pages/games/List'
+import CharacterCreate from './pages/characters/Create'
+import CharacterDetail from './pages/characters/Detail'
+import CharacterEdit from './pages/characters/Edit'
+import CharacterGames from './pages/characters/Games'
+import CharacterList from './pages/characters/List'
+import CharacterMoves from './pages/characters/Moves'
 import MoveCreate from './pages/moves/Create'
 import MoveEdit from './pages/moves/Edit'
 import MoveList from './pages/moves/List'
@@ -25,12 +31,12 @@ export const routes: RouteObject[] = [
       { path: 'game/edit/:id', element: <GameEdit /> },
       { path: 'game/create', element: <GameCreate /> },
 
-      { path: 'character/list', element: page('Characters') },
-      { path: 'character/edit/:id', element: page('Edit Character') },
-      { path: 'character/edit/:id/games', element: page('Character Games') },
-      { path: 'character/edit/:id/moves', element: page('Character Moves') },
-      { path: 'character/detail/:id', element: page('Character Detail') },
-      { path: 'character/create', element: page('Create Character') },
+      { path: 'character/list', element: <CharacterList /> },
+      { path: 'character/edit/:id', element: <CharacterEdit /> },
+      { path: 'character/edit/:id/games', element: <CharacterGames /> },
+      { path: 'character/edit/:id/moves', element: <CharacterMoves /> },
+      { path: 'character/detail/:id', element: <CharacterDetail /> },
+      { path: 'character/create', element: <CharacterCreate /> },
 
       { path: 'move/list', element: <MoveList /> },
       { path: 'move/edit/:id', element: <MoveEdit /> },

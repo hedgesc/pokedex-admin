@@ -26,7 +26,8 @@ export const useCharacter = (id: Id) =>
 export function useCreateCharacter() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (character: CharacterInput) => charactersApi.create(character),
+    mutationFn: (character: CharacterInput & { character_id?: Id }) =>
+      charactersApi.create(character),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.characters.all }),
   })
 }
