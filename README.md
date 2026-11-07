@@ -28,11 +28,12 @@ npm run dev                  # http://localhost:8080
 
 ## Layout
 
-- `src/routes.tsx` — every route, mirroring `legacy/src/router/index.js`. Games, Moves, and
-  Characters are ported; Pokédexes still render a placeholder.
+- `src/routes.tsx` — every route, mirroring `legacy/src/router/index.js`. Games, Moves,
+  Characters, and Pokédexes are ported.
 - `src/pages/games/` — Games list, create, and edit.
 - `src/pages/moves/` — Moves list, create, and edit. The list is paged.
 - `src/pages/characters/` — Characters list, create, edit, detail, games, and moves.
+- `src/pages/pokedexes/` — Pokédex list, create, edit, and the games in a Pokédex.
 - `src/components/ToastProvider.tsx` — success, error, and confirm toasts.
 - `src/components/Layout.tsx` — navbar and page shell.
 - `src/lib/config.ts` — runtime config (`VITE_API_URL`).
